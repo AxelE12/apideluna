@@ -30,4 +30,5 @@ INSERT INTO admin (nombre_usuario, contrasena)
 VALUES ('admin123', SHA1('contraseña123'));
 
 INSERT INTO negocio (nombre, descripcion, direccion, horario, tipo, disponible, distancia, latitud, longitud, categoria, insignia, imagen, imagenCategoria, logo)
-VALUES ('100% natural Cancún', 'Descripción muy natural', '123 Calle Principal', '9:00 AM - 5:00 PM', 'Restaurante', 'Abierto', '5km', '18.20', '20.10', 'Turismo consciente', true, 'C:\Users\Axel\Desktop\imgs\yoshi.png', 'C:\Users\Axel\Desktop\imgs\monocafe.png', 'C:\Users\Axel\Desktop\imgs\plantita.png');
+VALUES ('100% natural Cancún', 'Descripción muy natural', '123 Calle Principal', '9:00 AM - 5:00 PM', 'Restaurante', 'Abierto', '5km', '18.20', '20.10', 'Turismo consciente', true, 'C:\Users\Axel\Desktop\imgs\yoshi.png', 'C:\Users\Axel\Desktop\imgs\monocafe.png', 'C:\Users\Axel\Desktop\imgs\plantita.png'),
+;

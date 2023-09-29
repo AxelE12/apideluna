@@ -30,26 +30,12 @@ export const getNegocio = async (req, res) => {
 
 export const crearNegocio = async (req, res) => {
     try {
-        const {nombre, descripcion, direccion, horario, tipo, disponible, distancia, latitud, longitud, categoria, insignia, imagen, imagenCategoria, logo} = req.body;
-        const [rows]= await pool.query ('INSERT INTO negocios (nombre, descripcion, direccion, horario, tipo, disponible, distancia, latitud, longitud, categoria, insignia, imagen, imagenCategoria, logo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ',
-            [nombre, descripcion, direccion, horario, tipo, disponible, distancia, latitud, longitud, categoria, insignia, imagen, imagenCategoria, logo])
+        const {imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud} = req.body;
+        const [rows]= await pool.query ('INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ',
+            [imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud])
         
         res.send({
-            id: rows.insertId,
-            nombre, 
-            descripcion,
-            direccion,
-            horario,
-            tipo,
-            disponible,
-            distancia,
-            latitud,
-            longitud,
-            categoria,
-            insignia,
-            imagen,
-            imagenCategoria,
-            logo
+            id: rows.insertId, imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud
         })
     } catch (error) {
         res.status(500).json({
@@ -77,24 +63,10 @@ export const eliminarNegocio = async (req, res) =>{
 export const actualizarNegocio = async (req, res) => {
     try {
         const {id} = req.params
-        const {nombre, descripcion, direccion, horario, tipo, disponible, distancia, latitud, longitud, categoria, insignia, imagen, imagenCategoria, logo} = req.body
+        const {imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud} = req.body
     
-        const [result] = await pool.query('UPDATE negocios SET nombre = IFNULL(?, nombre), descripcion = IFNULL(?, descripcion), direccion = IFNULL(?, direccion), horario = IFNULL(?, horario), tipo = IFNULL(?, tipo), disponible = IFNULL(?, disponible), distancia = IFNULL(?, distancia), latitud = IFNULL(?, latitud), longitud = IFNULL(?, longitud), categoria = IFNULL(?, categoria), insignia = IFNULL(?, insignia), imagen = IFNULL(?, imagen), imagenCategoria = IFNULL(?, imagenCategoria), logo = IFNULL(?, logo) WHERE id = ?', [
-            nombre, 
-            descripcion,
-            direccion,
-            horario,
-            tipo,
-            disponible,
-            distancia,
-            latitud,
-            longitud,
-            categoria,
-            insignia,
-            imagen,
-            imagenCategoria,
-            logo,
-            id])
+        const [result] = await pool.query('UPDATE negocios SET imagenNegocio = IFNULL(?, imagenNegocio), tituloNegocio = IFNULL(?, tituloNegocio), disponible = IFNULL(?, disponible), distancia = IFNULL(?, distancia), imagenCategoria = IFNULL(?, imagenCategoria), descripcion= IFNULL(?, descripcion), insignia = IFNULL(?, insignia), tipoNegocio = IFNULL(?, tipoNegocio), direccion = IFNULL(?, direccion), imagenRealNegocio = IFNULL(?, imagenRealNegocio), nombreCategoria = IFNULL(?, nombreCategoria), horario = IFNULL(?, horario), latitud = IFNULL(?, latitud), longitud = IFNULL(?, longitud) WHERE id = ?', [
+            imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud, id])
     
             if(result.affectedRows === 0) return res.status(404).json({
                 message: 'Negocio no encontrado'
