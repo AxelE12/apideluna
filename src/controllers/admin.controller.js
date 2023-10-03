@@ -2,10 +2,10 @@ import { pool } from '../db.js';
 import crypto from 'crypto';
 
 export const getAdmin = async (req, res) => {
-    const { username, password } = req.body;
+    const { user, password } = req.body;
 
     try {
-        const [rows] = await pool.query('SELECT * FROM admin WHERE username = ?', [username]);
+        const [rows] = await pool.query('SELECT * FROM admin WHERE user = ?', [user]);
 
         if (rows.length === 1) {
             const storedPasswordHash = rows[0].password; 
