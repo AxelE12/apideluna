@@ -3,6 +3,6 @@ import {getAdmin} from '../controllers/admin.controller.js';
 
 const router = Router();
 
-router.get('/admin', getAdmin); 
+router.get('/home', getAdmin); 
 
 export default router;

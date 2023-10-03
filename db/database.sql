@@ -23,13 +23,12 @@ CREATE TABLE negocios (
 );
 
 CREATE TABLE admin (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_usuario VARCHAR(255) NOT NULL,
-    contrasena VARCHAR(255) NOT NULL
+    user VARCHAR(255) NOT NULL PRIMARY KEY,
+    password VARCHAR(255) NOT NULL
 );
 
-INSERT INTO admin (nombre_usuario, contrasena)
-VALUES ('admin123', SHA1('contraseña123'));
+INSERT INTO admin (user, password)
+VALUES ('admin', SHA1('deluna123'));
 
 INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud)
 VALUES (
