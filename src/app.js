@@ -3,7 +3,7 @@ import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 
-const cors = require('cors');
+var cors = require('cors')
 const app = express();
 
 app.use(cors());
