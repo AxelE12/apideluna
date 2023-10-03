@@ -2,8 +2,8 @@ import express from 'express';
 import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import cors from 'cors';
 
-var cors = require('cors')
 const app = express();
 
 app.use(cors());
