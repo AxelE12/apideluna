@@ -12,8 +12,7 @@ export const login = async (req, res) => {
             const userPasswordHash = crypto.createHash('sha1').update(password).digest('hex'); 
 
             if (userPasswordHash === storedPasswordHash) {
-                res.status(200).json({ message: 'Inicio de sesión hecho' });
-                res.json({ message: 'Inicio de sesión exitoso' });
+                res.status(200).json({ message: 'Inicio de sesión exitoso' });
             } else {
               
                 res.status(401).json({ message: 'Credenciales incorrectas' });
