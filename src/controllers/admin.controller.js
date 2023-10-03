@@ -1,7 +1,7 @@
 import { pool } from '../db.js';
 import crypto from 'crypto';
 
-export const getAdmin = async (req, res) => {
+export const login = async (req, res) => {
     const { user, password } = req.body;
 
     try {
