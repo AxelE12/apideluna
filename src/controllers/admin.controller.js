@@ -1,17 +1,26 @@
 import { pool } from '../db.js';
+import crypto from 'crypto';
 
 export const getAdmin = async (req, res) => {
-    const { user, password } = req.body;
+    const { username, password } = req.body;
 
     try {
-        const [rows] = await pool.query('SELECT * FROM admin WHERE user = ? AND password = ?', [user, password]);
+        const [rows] = await pool.query('SELECT * FROM admin WHERE username = ?', [username]);
 
         if (rows.length === 1) {
-            // Credenciales válidas, el usuario y contraseña coinciden
-            res.json({ message: 'Inicio de sesión exitoso' });
+            const storedPasswordHash = rows[0].password; 
+            const userPasswordHash = crypto.createHash('sha1').update(password).digest('hex'); 
+
+            if (userPasswordHash === storedPasswordHash) {
+              
+                res.json({ message: 'Inicio de sesión exitoso' });
+            } else {
+              
+                res.status(401).json({ message: 'Credenciales incorrectas' });
+            }
         } else {
-            // Credenciales inválidas, el usuario y contraseña no coinciden
-            res.status(401).json({ message: 'Credenciales incorrectas' });
+        
+            res.status(401).json({ message: 'Usuario no encontrado' });
         }
     } catch (error) {
         console.error(error);
