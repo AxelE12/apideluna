@@ -46,11 +46,7 @@ app.get('/imgs', (req, res) => {
       if(error){
          res.send(error);
       }
-      
-      //forza la descarga del archivo
-      res.setHeader('Content-Disposition', `attachment; filename="${results[0].name}"`);
-      res.setHeader('Content-Type', results[0].mimetype)
-      res.send(results[0].data);
+      res.json(results);
     });
 });
 
