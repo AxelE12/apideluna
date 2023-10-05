@@ -2,10 +2,13 @@ import express from 'express';
 import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+const fileUpload = require('express-fileupload');
 
+app.use(fileUpload());
 const app = express();
 
 app.use(express.json());
+app.use 
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {

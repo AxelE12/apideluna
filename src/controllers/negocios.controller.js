@@ -1,5 +1,4 @@
 import {pool} from '../db.js';
-const fileUpload = require('express-fileupload');
 
 
 export const getNegocios = async (req, res) => {
@@ -59,7 +58,7 @@ export const crearNegocio = async (req, res) => {
 
         let sql = `INSERT INTO negocios (imagenNegocio) VALUES(?)`;
         pool.query(sql, [req.files.archivo.data]);
-        
+
 
         const {tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud} = req.body;
         const [rows]= await pool.query ('INSERT INTO negocios (tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ',
