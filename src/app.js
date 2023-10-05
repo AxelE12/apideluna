@@ -9,7 +9,6 @@ app.use(fileUpload());
 const app = express();
 
 app.use(express.json());
-app.use 
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
