@@ -13,4 +13,5 @@ router.delete('/negocios/:id', eliminarNegocio);
 
 router.patch('/negocios/:id', actualizarNegocio);
 
+
 export default router;
