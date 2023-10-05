@@ -41,13 +41,14 @@ app.post('/img', (req, res) => {
 });
 
 app.get('/imgs', (req, res) => {
-    let sql = `SELECT * FROM file`;
-      pool.query(sql, [id], (error, results, fields) => {
-      if(error){
-         res.send(error);
-      }
-      res.json(results);
-    });
+    try {
+        const [rows] = pool.query('SELECT * FROM negocios')
+        res.json(rows)
+    } catch (error) {        
+        res.status(500).json({
+            message: 'Error al obtener los negocios'
+        })
+    }
 });
 
 
