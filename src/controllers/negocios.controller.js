@@ -1,5 +1,8 @@
 import {pool} from '../db.js';
+const fetch = require('node-fetch');
+import {app} from '../app.js';
 
+app.use(fileUpload());
 
 export const getNegocios = async (req, res) => {
     try {
