@@ -39,19 +39,22 @@ app.post('/img', (req, res) => {
       res.json(results);
     });
 });
-
-app.get('/imgs', (req, res) => {
-    try {
-        const [rows] = pool.query('SELECT * FROM negocios')
-        res.json(rows)
-    } catch (error) {        
-        res.status(500).json({
-            message: 'Error al obtener los negocios'
-        })
-    }
+/*
+app.get('/img/:id', (req, res) => {
+    let sql = `SELECT * FROM file WHERE id = ?`;
+      pool.query(sql, [id], (error, results, fields) => {
+      if(error){
+         res.send(error);
+      }
+      
+      //forza la descarga del archivo
+      res.setHeader('Content-Disposition', `attachment; filename="${results[0].name}"`);
+      res.setHeader('Content-Type', results[0].mimetype)
+      res.send(results[0].data);
+    });
 });
 
-
+*/
 app.use((req, res, next) => {
     res.status(404).json({
         message: 'Not found'
