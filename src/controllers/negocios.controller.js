@@ -11,6 +11,17 @@ export const getNegocios = async (req, res) => {
     }
 }
 
+export const imgs = async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM file')
+        res.json(rows)
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al obtener las imagenes'
+        })
+    }
+}
+
 export const getNegocio = async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM negocios WHERE id = ?', [req.params.id])
