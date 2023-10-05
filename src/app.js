@@ -3,7 +3,7 @@ import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import fileUpload from 'express-fileupload';
-import {pool} from '../db.js';
+import {pool} from './db.js';
 
 const app = express();
 
