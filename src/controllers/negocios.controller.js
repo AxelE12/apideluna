@@ -14,6 +14,8 @@ export const getNegocios = async (req, res) => {
 export const imgs = async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM file')
+        res.setHeader('Content-Disposition', `attachment; filename="${results[0].name}"`);
+        res.setHeader('Content-Type', results[0].mimetype)
         res.json(rows)
     } catch (error) {
         res.status(500).json({
