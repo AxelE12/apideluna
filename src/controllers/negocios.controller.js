@@ -27,7 +27,6 @@ export const getNegocio = async (req, res) => {
     }
 }
 
-/*
 export const crearNegocio = async (req, res) => {
     try {
         const {imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud} = req.body;
@@ -44,8 +43,7 @@ export const crearNegocio = async (req, res) => {
     }
 }
 
-*/
-
+/*
 export const crearNegocio = async (req, res) => {
     try {
         let sampleFile = '';
@@ -74,6 +72,7 @@ export const crearNegocio = async (req, res) => {
 }
 
 
+*/
 
 export const eliminarNegocio = async (req, res) =>{
     try {

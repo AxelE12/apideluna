@@ -2,10 +2,10 @@ import express from 'express';
 import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
-import fileUpload from 'express-fileupload';
-const fetch = require('node-fetch');
+//import fileUpload from 'express-fileupload';
+//const fetch = require('node-fetch');
 
-app.use(fileUpload());
+//app.use(fileUpload());
 const app = express();
 
 app.use(express.json());
