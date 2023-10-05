@@ -4,7 +4,6 @@ import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import fileUpload from 'express-fileupload';
 
-const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 
 const app = express();
