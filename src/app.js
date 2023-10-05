@@ -3,6 +3,7 @@ import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import fileUpload from 'express-fileupload';
+import {pool} from '../db.js';
 
 const app = express();
 
@@ -31,7 +32,7 @@ app.post('/img', (req, res) => {
 
     //name, data, size, mimetype
     let sql = `INSERT INTO file(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-      conexion.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
+      pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
       if(error){
          res.send(error);
       }
@@ -39,10 +40,10 @@ app.post('/img', (req, res) => {
     });
 });
 
-app.get('/img/:id', (req, res) => {
+app.get('/imgg', (req, res) => {
     const id = req.params.id;
     let sql = `SELECT * FROM file WHERE id = ?`;
-      conexion.query(sql, [id], (error, results, fields) => {
+      pool.query(sql, [id], (error, results, fields) => {
       if(error){
          res.send(error);
       }
