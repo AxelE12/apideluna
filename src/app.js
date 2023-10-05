@@ -2,7 +2,7 @@ import express from 'express';
 import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
-const fileUpload = require('express-fileupload');
+import fileUpload from 'express-fileupload';
 const fetch = require('node-fetch');
 
 app.use(fileUpload());
