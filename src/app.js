@@ -40,7 +40,7 @@ app.post('/img', (req, res) => {
     });
 });
 
-app.get('/imgg', (req, res) => {
+app.get('/img/:id', (req, res) => {
     const id = req.params.id;
     let sql = `SELECT * FROM file WHERE id = ?`;
       pool.query(sql, [id], (error, results, fields) => {
