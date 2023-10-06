@@ -18,7 +18,7 @@ const storage = multer.memoryStorage(); // Almacenar las imágenes en memoria
 const upload = multer({ storage: storage });
 
 // Ruta PATCH para actualizar el negocio y las imágenes
-app.patch('/api/negocios/:id', upload.fields([
+app.patch('/ap/negocios/:id', upload.fields([
     { name: 'imagenNegocio', maxCount: 1 },
     { name: 'imagenRealNegocio', maxCount: 1 },
     { name: 'imagenCategoria', maxCount: 1 },
