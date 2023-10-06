@@ -1,4 +1,9 @@
 import {pool} from '../db.js';
+import multer from 'multer';
+
+// Configura multer para manejar la carga de archivos
+const storage = multer.memoryStorage(); // Almacenar las imágenes en memoria
+const upload = multer({ storage: storage });
 
 
 export const getNegocios = async (req, res) => {
@@ -117,6 +122,42 @@ export const eliminarNegocio = async (req, res) =>{
     }
 }
 
+export const actualizarNegocio = (upload.fields([    
+    { name: 'imagenNegocio', maxCount: 1 },
+    { name: 'imagenRealNegocio', maxCount: 1 },
+    { name: 'imagenCategoria', maxCount: 1 },
+]), async (req, res) => {
+    try {
+        const {id} = req.params
+        const imagenNegocioFile = req.files.imagenNegocio; // El archivo de imagen subido para imagenNegocio
+        const imagenRealNegocioFile = req.files.imagenRealNegocio; // El archivo de imagen subido para imagenRealNegocio
+        const imagenCategoriaFile = req.files.imagenCategoria; // El archivo de imagen subido para imagenCategoria
+        const {imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud} = req.body
+        
+        if (!imagenNegocioFile && !imagenRealNegocioFile && !imagenCategoriaFile) {
+            return res.status(400).json({
+                message: 'No se envió ninguna imagen válida para actualizar.',
+            });
+        }
+
+        const [result] = await pool.query('UPDATE negocios SET imagenNegocio = IFNULL(?, imagenNegocio), tituloNegocio = IFNULL(?, tituloNegocio), disponible = IFNULL(?, disponible), distancia = IFNULL(?, distancia), imagenCategoria = IFNULL(?, imagenCategoria), descripcion= IFNULL(?, descripcion), insignia = IFNULL(?, insignia), tipoNegocio = IFNULL(?, tipoNegocio), direccion = IFNULL(?, direccion), imagenRealNegocio = IFNULL(?, imagenRealNegocio), nombreCategoria = IFNULL(?, nombreCategoria), horario = IFNULL(?, horario), latitud = IFNULL(?, latitud), longitud = IFNULL(?, longitud) WHERE id = ?', [
+            imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud, id])
+    
+            if(result.affectedRows === 0) return res.status(404).json({
+                message: 'Negocio no encontrado'
+            })
+    
+            const [rows] = await pool.query('SELECT * FROM negocios WHERE id = ?', [id])
+    
+            res.json(rows) 
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al actualizar el negocio'
+        })
+    }
+})
+
+/*
 export const actualizarNegocio = async (req, res) => {
     try {
         const {id} = req.params
@@ -140,3 +181,4 @@ export const actualizarNegocio = async (req, res) => {
 }
 
 
+*/
