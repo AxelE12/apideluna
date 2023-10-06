@@ -13,7 +13,7 @@ router.delete('/negocios/:id', eliminarNegocio);
 
 router.patch('/negocios/:id', actualizarNegocio);
 
-router.get('/imgs', imgs);
+router.get('/imgs/:id', imgs);
 
 
 export default router;
