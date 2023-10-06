@@ -14,7 +14,7 @@ export const getNegocios = async (req, res) => {
 export const imgs = async (req, res) => {
     const id = req.params.id;
     let sql = `SELECT * FROM file WHERE id = ?`;
-      conexion.query(sql, [id], (error, results, fields) => {
+      pool.query(sql, [id], (error, results, fields) => {
       if(error){
          res.send(error);
       }
