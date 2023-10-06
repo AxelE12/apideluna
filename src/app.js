@@ -10,6 +10,8 @@ const app = express();
 app.use(express.json());
 app.use(fileUpload());
 
+
+
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -22,7 +24,7 @@ app.use((req, res, next) => {
 app.use(indexRoutes);
 app.use('/api', negociosRoutes, adminRoutes);
 
-app.post('/imgs', (req, res) => {
+app.post('/img', (req, res) => {
     let sampleFile = '';
     if(!req.files || Object.keys(req.files).length === 0){
         return res.status(400).send('No se enviaron archivos');
@@ -32,13 +34,16 @@ app.post('/imgs', (req, res) => {
 
     //name, data, size, mimetype
     let sql = `INSERT INTO imagenNegocio(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-    pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
+      pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
       if(error){
          res.send(error);
       }
       res.json(results);
     });
 });
+
+
+
 /*
 app.get('/img/:id', (req, res) => {
     let sql = `SELECT * FROM file WHERE id = ?`;
