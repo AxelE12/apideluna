@@ -12,19 +12,24 @@ export const getNegocios = async (req, res) => {
 }
 
 export const imgs = async (req, res) => {
-    const id = req.params.id;
-    let sql = `SELECT * FROM file WHERE id = ?`;
-      pool.query(sql, [id], (error, results, fields) => {
-      if(error){
-         res.send(error);
-      }
+        const sql = 'SELECT * FROM file';
       
-      //forza la descarga del archivo
-      res.setHeader('Content-Disposition', `attachment; filename="${results[0].name}"`);
-      res.setHeader('Content-Type', results[0].mimetype)
-      res.send(results[0].data);
-    });
-};
+        pool.query(sql, (err, results) => {
+          if (err) {
+            console.error('Error al consultar la base de datos:', err);
+            res.status(500).json({ message: 'Error al obtener los datos de la base de datos' });
+          } else {
+            const dataWithImageUrls = results.map(file => {
+              // Convierte los datos binarios en una URL de imagen codificada en Base64
+              const imageBase64 = Buffer.from(file.data).toString('base64');
+              const imageUrl = `data:${file.mimetype};base64,${imageBase64}`;
+              
+              return { ...file, imageUrl };
+            });
+            res.json(dataWithImageUrls);
+          }
+        });
+      };
 
 export const getNegocio = async (req, res) => {
     try {
