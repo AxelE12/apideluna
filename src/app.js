@@ -8,6 +8,11 @@ import {pool} from './db.js';
 
 import multer from 'multer';
 
+const app = express();
+
+app.use(express.json());
+app.use(fileUpload());
+
 // Configura multer para manejar la carga de archivos
 const storage = multer.memoryStorage(); // Almacenar las imágenes en memoria
 const upload = multer({ storage: storage });
@@ -99,13 +104,6 @@ app.patch('/api/negocios/:id', upload.fields([
 
 
 
-
-
-
-const app = express();
-
-app.use(express.json());
-app.use(fileUpload());
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
