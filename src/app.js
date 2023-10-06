@@ -126,14 +126,15 @@ app.post('/img', (req, res) => {
     sampleFile = req.files.archivo;
 
     //name, data, size, mimetype
-    let sql = `INSERT INTO file(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-      pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
+    let sql = `INSERT INTO negocios(imagenNegocio) VALUES(?)`;
+      pool.query(sql, [req.files.archivo.data], (error, results, fields) => {
       if(error){
          res.send(error);
       }
       res.json(results);
     });
 });
+
 /*
 app.get('/img/:id', (req, res) => {
     let sql = `SELECT * FROM file WHERE id = ?`;
