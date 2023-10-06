@@ -59,7 +59,6 @@ export const crearNegocio = async (req, res) => {
         res.json(results);
       });
 
-
     try {
         const {imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud} = req.body;
         const [rows]= await pool.query ('INSERT INTO negocios (tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ',
