@@ -32,16 +32,16 @@ VALUES ('admin', SHA1('deluna123'));
 
 INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud)
 VALUES (
-	('C:\Users\Axel\Desktop\imgs\yoshi.png', 
+	('yoshi.png', 
     'Café Jade',
     'Abierto',
     '5km',
-    'C:\Users\Axel\Desktop\imgs\monocafe.png',
+    'monocafe.png',
     '¡Descubre el encanto de Café Jade! Nos ubicamos en un lugar privilegiado lleno de naturaleza. ¡Ven a vivir momentos inolvidables con nosotros!', 
     true, 
     'Restaurante', 
 	'Prolongación Av. Hidalgo Esq. 5ta Poniente Norte, #1 Zona Turística la Cañada. 29960 Palenque, Chiapas, Mexico',
-    'C:\Users\Axel\Desktop\imgs\plantita.png',
+    'plantita.png',
     'Turismo consciente', 
     '8:00 - 23:00', 
     ' 17.50966062464474 ', 
