@@ -45,32 +45,41 @@ export const getNegocio = async (req, res) => {
 }
 
 export const crearNegocio = async (req, res) => {
-    let sampleFile = '';
-    if(!req.files || Object.keys(req.files).length === 0){
-        return res.status(400).send('No se enviaron archivos');
-    }
-    sampleFile = req.files.archivo;
-
-    let sql = `INSERT INTO file(imagenNegocio, imagenCategoria, imagenRealNegocio) VALUES(?, ?, ?)`;
-    pool.query(sql, [req.files.archivo.data], (error, results, fields) => {
-        if(error){
-           res.send(error);
-        }
-        res.json(results);
-      });
-
     try {
-        const {imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud} = req.body;
-        const [rows]= await pool.query ('INSERT INTO negocios (tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ',
-            [tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud])
-        
-        res.send({
-            id: rows.insertId, imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud
-        })
+        const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
+        const imagenNegocio = req.files.imagenNegocio;
+        const imagenCategoria = req.files.imagenCategoria;
+        const imagenRealNegocio = req.files.imagenRealNegocio;
+
+        // Verificar si al menos una de las imágenes se ha enviado
+        if (!imagenNegocio && !imagenCategoria && !imagenRealNegocio) {
+            return res.status(400).json({ message: 'Debes enviar al menos una imagen' });
+        }
+
+        // Insertar las imágenes en la tabla 'file' si están presentes
+        let sql = `INSERT INTO file(imagenNegocio, imagenCategoria, imagenRealNegocio) VALUES(?, ?, ?)`;
+        await pool.query(sql, [
+            imagenNegocio ? imagenNegocio.data : null,
+            imagenCategoria ? imagenCategoria.data : null,
+            imagenRealNegocio ? imagenRealNegocio.data : null
+        ]);
+
+        // Insertar los datos del negocio en la tabla 'negocios'
+        const [rows] = await pool.query(`
+            INSERT INTO negocios (tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud]);
+
+        res.status(201).json({
+            id: rows.insertId,
+            mensaje: 'Negocio creado con éxito'
+        });
     } catch (error) {
+        console.error('Error al crear el negocio:', error);
         res.status(500).json({
-            message: 'Error al crear el negocio'
-        })
+            message: 'Error al crear el negocio',
+            error: error.message
+        });
     }
 }
 
