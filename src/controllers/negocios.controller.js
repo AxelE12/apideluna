@@ -135,11 +135,7 @@ export const eliminarNegocio = async (req, res) =>{
     }
 }
 
-export const actualizarNegocio = (upload.fields([    
-    { name: 'imagenNegocio', maxCount: 1 },
-    { name: 'imagenRealNegocio', maxCount: 1 },
-    { name: 'imagenCategoria', maxCount: 1 },
-]), async (req, res) => {
+export const actualizarNegocio = async (req, res) => {
     try {
         const {id} = req.params
         const imagenNegocioFile = req.files.imagenNegocio; // El archivo de imagen subido para imagenNegocio
@@ -168,7 +164,7 @@ export const actualizarNegocio = (upload.fields([
             message: 'Error al actualizar el negocio'
         })
     }
-})
+}
 
 /*
 export const actualizarNegocio = async (req, res) => {
