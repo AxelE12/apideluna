@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getNegocios, getNegocio, crearNegocio, actualizarNegocio, eliminarNegocio, imgs, imagenNegocio, imagenCategoria, imagenRealNegocio} from '../controllers/negocios.controller.js';
+import {getNegocios, getNegocio, crearNegocio, actualizarNegocio, eliminarNegocio, imgs, imagenNegocio, imagenCategoria, imagenRealNegocio, getImagenN, getImagenC, getImagenRN} from '../controllers/negocios.controller.js';
 
 const router = Router();
 
@@ -11,9 +11,15 @@ router.post('/negocios', crearNegocio);
 
 router.post('/imagenNegocio', imagenNegocio);
 
+router.get('/getImagenNegocio', getImagenN);
+
 router.post('/imagenCategoria', imagenCategoria);
 
+router.get('/getImagenCategoria', getImagenC);
+
 router.post('/imagenRealNegocio', imagenRealNegocio);
+
+router.get('/getImagenRealNegocio', getImagenRN);
 
 router.delete('/negocios/:id', eliminarNegocio);
 
