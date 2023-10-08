@@ -11,9 +11,31 @@ export const getNegocios = async (req, res) => {
     }
 }
 
-export const imgs = async (req, res) => {
+export const getImagenN = async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM file')
+        const [rows] = await pool.query('SELECT * FROM imagenNegocio')
+        res.json(rows)
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al obtener las imagenes'
+        })
+    }
+}
+
+export const getImagenC = async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM imagenCategoria')
+        res.json(rows)
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al obtener las imagenes'
+        })
+    }
+}
+
+export const getImagenRN = async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM imagenRealNegocio')
         res.json(rows)
     } catch (error) {
         res.status(500).json({
