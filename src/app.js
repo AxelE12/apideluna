@@ -10,8 +10,6 @@ const app = express();
 app.use(express.json());
 app.use(fileUpload());
 
-
-
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -24,7 +22,8 @@ app.use((req, res, next) => {
 app.use(indexRoutes);
 app.use('/api', negociosRoutes, adminRoutes);
 
-app.post('/img', (req, res) => {
+
+app.post('/api/imagenNegocio', (req, res) => {
     let sampleFile = '';
     if(!req.files || Object.keys(req.files).length === 0){
         return res.status(400).send('No se enviaron archivos');
@@ -42,6 +41,43 @@ app.post('/img', (req, res) => {
     });
 });
 
+
+app.post('/api/imagenRealNegocio', (req, res) => {
+    let sampleFile = '';
+    if(!req.files || Object.keys(req.files).length === 0){
+        return res.status(400).send('No se enviaron archivos');
+    }
+
+    sampleFile = req.files.archivo;
+
+    //name, data, size, mimetype
+    let sql = `INSERT INTO imagenRealNegocio(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
+      pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
+      if(error){
+         res.send(error);
+      }
+      res.json(results);
+    });
+});
+
+
+app.post('/api/imagenCategoria', (req, res) => {
+    let sampleFile = '';
+    if(!req.files || Object.keys(req.files).length === 0){
+        return res.status(400).send('No se enviaron archivos');
+    }
+
+    sampleFile = req.files.archivo;
+
+    //name, data, size, mimetype
+    let sql = `INSERT INTO imagenCategoria(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
+      pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
+      if(error){
+         res.send(error);
+      }
+      res.json(results);
+    });
+});
 
 
 /*

@@ -1,10 +1,4 @@
 import {pool} from '../db.js';
-import multer from 'multer';
-
-// Configura multer para manejar la carga de archivos
-const storage = multer.memoryStorage(); // Almacenar las imágenes en memoria
-const upload = multer({ storage: storage });
-
 
 export const getNegocios = async (req, res) => {
     try {
@@ -125,8 +119,11 @@ export const crearNegocio = async (req, res) => {
 export const eliminarNegocio = async (req, res) =>{
     try {
         const [result] = await pool.query('DELETE FROM negocios WHERE id = ?', [req.params.id])
+        const [result2] = await pool.query('DELETE FROM imagenNegocio WHERE id = ?', [req.params.id])
+        const [result3] = await pool.query('DELETE FROM imagenCategoria WHERE id = ?', [req.params.id])
+        const [result4] = await pool.query('DELETE FROM imagenRealNegocio WHERE id = ?', [req.params.id])
 
-        if(result.affectedRows <= 0) return res.status(404).json({
+        if(result.affectedRows <= 0 && result2.affectedRows <= 0 && result3.affectedRows <= 0 && result4.affectedRows <= 0) return res.status(404).json({
             message: 'Negocio no encontrado'
         })
 
