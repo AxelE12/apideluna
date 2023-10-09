@@ -24,6 +24,53 @@ app.use('/api', negociosRoutes, adminRoutes);
 
 
 app.post('/api/NegImg', async (req, res) => {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).json({
+            message: 'No se enviaron archivos'
+        });
+    }
+
+    try {
+        const { imagenNegocio, imagenCategoria, imagenRealNegocio } = req.files;
+        const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
+
+        const [rows] = await pool.query(
+            'INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [imagenNegocio.data, tituloNegocio, disponible, distancia, imagenCategoria.data, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio.data, nombreCategoria, horario, latitud, longitud]
+        );
+
+        res.status(201).json({
+            id: rows.insertId,
+            imagenNegocio: imagenNegocio.name,
+            tituloNegocio,
+            disponible,
+            distancia,
+            imagenCategoria: imagenCategoria.name,
+            descripcion,
+            insignia,
+            tipoNegocio,
+            direccion,
+            imagenRealNegocio: imagenRealNegocio.name,
+            nombreCategoria,
+            horario,
+            latitud,
+            longitud
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Error al crear el negocio'
+        });
+    }
+});
+
+
+
+
+
+
+/*
+app.post('/api/NegImg', async (req, res) => {
     let sampleFile = '';
     if(!req.files || Object.keys(req.files).length === 0){
         return res.status(400).send('No se enviaron archivos');
@@ -46,7 +93,7 @@ app.post('/api/NegImg', async (req, res) => {
     }
 });
 
-
+*/
 app.post('/api/imagenRealNegocio', (req, res) => {
     let sampleFile = '';
     if(!req.files || Object.keys(req.files).length === 0){
