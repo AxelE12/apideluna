@@ -23,22 +23,27 @@ app.use(indexRoutes);
 app.use('/api', negociosRoutes, adminRoutes);
 
 
-app.post('/api/imagenNegocio', (req, res) => {
+app.post('/api/NegImg', async (req, res) => {
     let sampleFile = '';
     if(!req.files || Object.keys(req.files).length === 0){
         return res.status(400).send('No se enviaron archivos');
     }
-
-    sampleFile = req.files.archivo;
-
-    //name, data, size, mimetype
-    let sql = `INSERT INTO imagenNegocio(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-      pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
-      if(error){
-         res.send(error);
-      }
-      res.json(results);
-    });
+    try {
+        sampleFile = req.files.archivo;
+        
+        const {imagenNegocio, imagenCategoria, imagenRealNegocio} = req.files.archivo.data;
+        const {tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud} = req.body;
+        const [rows]= await pool.query ('INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ',
+            [imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud])
+        
+        res.send({
+            id: rows.insertId, imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al crear el negocio'
+        })
+    }
 });
 
 
