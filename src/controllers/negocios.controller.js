@@ -11,38 +11,6 @@ export const getNegocios = async (req, res) => {
     }
 }
 
-export const getImagenN = async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM imagenNegocio')
-        res.json(rows)
-    } catch (error) {
-        res.status(500).json({
-            message: 'Error al obtener las imagenes'
-        })
-    }
-}
-
-export const getImagenC = async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM imagenCategoria')
-        res.json(rows)
-    } catch (error) {
-        res.status(500).json({
-            message: 'Error al obtener las imagenes'
-        })
-    }
-}
-
-export const getImagenRN = async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM imagenRealNegocio')
-        res.json(rows)
-    } catch (error) {
-        res.status(500).json({
-            message: 'Error al obtener las imagenes'
-        })
-    }
-}
 
 export const getNegocio = async (req, res) => {
     try {
@@ -60,65 +28,6 @@ export const getNegocio = async (req, res) => {
     }
 }
 
-//IMAGENES
-export const imagenNegocio = async (req, res) => {
-        let sampleFile = '';
-        if(!req.files || Object.keys(req.files).length === 0){
-            return res.status(400).send('No se enviaron archivos');
-        }
-    
-        sampleFile = req.files.archivo;
-    
-        //name, data, size, mimetype
-        let sql = `INSERT INTO imagenNegocio(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-          pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
-          if(error){
-             res.send(error);
-          }
-          res.json(results);
-        });
-    };
-
-
-    export const imagenCategoria = async (req, res) => {
-        let sampleFile = '';
-        if(!req.files || Object.keys(req.files).length === 0){
-            return res.status(400).send('No se enviaron archivos');
-        }
-    
-        sampleFile = req.files.archivo;
-    
-        //name, data, size, mimetype
-        let sql = `INSERT INTO imagenCategoria(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-          pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
-          if(error){
-             res.send(error);
-          }
-          res.json(results);
-        });
-    };
-
-
-    export const imagenRealNegocio = async (req, res) => {
-        let sampleFile = '';
-        if(!req.files || Object.keys(req.files).length === 0){
-            return res.status(400).send('No se enviaron archivos');
-        }
-    
-        sampleFile = req.files.archivo;
-    
-        //name, data, size, mimetype
-        let sql = `INSERT INTO imagenRealNegocio(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-          pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
-          if(error){
-             res.send(error);
-          }
-          res.json(results);
-        });
-    };
-
-////
-
 export const crearNegocio = async (req, res) => {
     try {
         const {tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud} = req.body;
@@ -134,8 +43,6 @@ export const crearNegocio = async (req, res) => {
         })
     }
 }
-
-
 
 
 export const eliminarNegocio = async (req, res) =>{
