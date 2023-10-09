@@ -13,7 +13,7 @@ app.use(fileUpload());
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Headers', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, DELETE');
     res.header('Allow', 'GET, POST, OPTIONS, PATCH, DELETE');
     next();
@@ -41,16 +41,16 @@ app.post('/api/NegImg', async (req, res) => {
 
         res.status(201).json({
             id: rows.insertId,
-            imagenNegocio: imagenNegocio.name,
+            imagenNegocio: imagenNegocio.data,
             tituloNegocio,
             disponible,
             distancia,
-            imagenCategoria: imagenCategoria.name,
+            imagenCategoria: imagenCategoria.data,
             descripcion,
             insignia,
             tipoNegocio,
             direccion,
-            imagenRealNegocio: imagenRealNegocio.name,
+            imagenRealNegocio: imagenRealNegocio.data,
             nombreCategoria,
             horario,
             latitud,
