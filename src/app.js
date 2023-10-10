@@ -36,17 +36,13 @@ app.use(indexRoutes);
 app.use('/api', negociosRoutes, adminRoutes);
 
 
-app.post('/api/NegImg', upload.fields([
-    { name: 'imagenNegocio', maxCount: 1 },
-    { name: 'imagenCategoria', maxCount: 1 },
-    { name: 'imagenRealNegocio', maxCount: 1 },
-  ]), async (req, res) => {
+app.post('/api/NegImg', async (req, res) => {
     try {
-      if (!req.files || Object.keys(req.files).length !== 3) {
-        return res.status(400).json({
-          message: 'Se deben proporcionar exactamente 3 archivos: imagenNegocio, imagenCategoria y imagenRealNegocio',
-        });
-      }
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({
+                message: 'No se enviaron archivos'
+            });
+        }
   
       const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
       const { imagenNegocio, imagenCategoria, imagenRealNegocio } = req.files;
