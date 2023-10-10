@@ -4,11 +4,8 @@ import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import fileUpload from 'express-fileupload';
 import {pool} from './db.js';
-import multer from 'multer';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-
-const upload = multer();
 
 const app = express();
 
@@ -21,7 +18,6 @@ const firebaseConfig = {
   };
 
 const firebaseApp = initializeApp(firebaseConfig);
-const storage = getStorage(firebaseApp);
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
@@ -50,8 +46,8 @@ app.post('/api/NegImg', async (req, res) => {
       // Subir imágenes a Firebase Storage
       const urls = await Promise.all([
         uploadImage(imagenNegocio[0]),
-        uploadImage(imagenCategoria[0]),
-        uploadImage(imagenRealNegocio[0]),
+        uploadImage(imagenCategoria[1]),
+        uploadImage(imagenRealNegocio[2]),
       ]);
   
       // Almacenar los datos y las URLs en la base de datos
@@ -161,31 +157,6 @@ app.post('/api/NegImg', async (req, res) => {
         res.status(500).json({
             message: 'Error al crear el negocio'
         });
-    }
-});
-
-*/
-/*
-app.post('/api/NegImg', async (req, res) => {
-    let sampleFile = '';
-    if(!req.files || Object.keys(req.files).length === 0){
-        return res.status(400).send('No se enviaron archivos');
-    }
-    try {
-        sampleFile = req.files.archivo;
-        
-        const {imagenNegocio, imagenCategoria, imagenRealNegocio} = req.files.archivo.data;
-        const {tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud} = req.body;
-        const [rows]= await pool.query ('INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ',
-            [imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud])
-        
-        res.send({
-            id: rows.insertId, imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: 'Error al crear el negocio'
-        })
     }
 });
 
