@@ -99,9 +99,11 @@ app.post('/api/NegImg', upload.fields([
         const downloadUrl = await getDownloadURL(storageRef);
         return downloadUrl;
     } catch (error) {
-        console.error('Error al subir la imagen a Firebase Storage:', error);
-        throw error;
-    }
+        console.error('Error general:', error);
+        res.status(500).json({
+          message: 'Error al crear el negocio',
+        })
+        }
     }
 
 
