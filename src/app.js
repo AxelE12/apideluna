@@ -87,7 +87,7 @@ app.post('/api/NegImg', async (req, res) => {
 
 
   async function uploadImage(image) {
-    const destination = `Imagenes/${Date.now()}_${image.originalname}`;
+    const destination = `Imagenes/${Date.now()}_${image.name}`;
     const storage = getStorage(firebaseApp); // Inicializa una instancia de Firebase Storage
     const storageRef = ref(storage, destination);
     try {
@@ -97,7 +97,7 @@ app.post('/api/NegImg', async (req, res) => {
     } catch (error) {
         console.error('Error general:', error);
         res.status(500).json({
-          message: 'Error al crear el negocio',
+          message: 'Error al crear el negociooo',
         })
         }
     }
