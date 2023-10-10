@@ -31,6 +31,25 @@ app.use((req, res, next) => {
 app.use(indexRoutes);
 app.use('/api', negociosRoutes, adminRoutes);
 
+app.post('/crearNeg', async (req, res) => {
+
+
+    return res.json({message: 'Negocio creado'})
+
+})
+
+
+app.get('/Negs', async (req, res) => {
+
+    return res.json({message: 'Negocios obtenidos'})
+})
+
+    
+
+
+
+
+
 
 app.post('/api/NegImg', async (req, res) => {
     try {
