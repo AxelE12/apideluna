@@ -8,6 +8,12 @@ import multer from 'multer';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+const upload = multer();
+
+const app = express();
+
+app.use(express.json());
+app.use(fileUpload());
 
 const firebaseConfig = {
     projectId: 'imgs-89fcf',
@@ -16,13 +22,6 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const storage = getStorage(firebaseApp);
-
-const upload = multer();
-
-const app = express();
-
-app.use(express.json());
-app.use(fileUpload());
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
