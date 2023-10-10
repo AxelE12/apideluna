@@ -61,7 +61,7 @@ app.post('/api/NegImg', upload.fields([
   
       // Almacenar los datos y las URLs en la base de datos
       const [rows] = await pool.query(
-        'INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO firebase (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [urls[0], tituloNegocio, disponible, distancia, urls[1], descripcion, insignia, tipoNegocio, direccion, urls[2], nombreCategoria, horario, latitud, longitud]
       );
   
@@ -93,16 +93,17 @@ app.post('/api/NegImg', upload.fields([
 
   async function uploadImage(image) {
     const destination = `Imagenes/${Date.now()}_${image.originalname}`;
-    await bucket.upload(image.buffer, {
-      destination: destination,
-      metadata: {
-        contentType: image.mimetype,
-      },
-    });
-    const [url] = await bucket.file(destination).getSignedUrl({ action: 'read', expires: '01-01-2100' });
-    return url;
-  }
-
+    const storage = getStorage(firebaseApp); // Inicializa una instancia de Firebase Storage
+    const storageRef = ref(storage, destination);
+    try {
+        await uploadBytes(storageRef, image.data);
+        const downloadUrl = await getDownloadURL(storageRef);
+        return downloadUrl;
+    } catch (error) {
+        console.error('Error al subir la imagen a Firebase Storage:', error);
+        throw error;
+    }
+    }
 
 
 

@@ -22,6 +22,25 @@ CREATE TABLE negocios (
     longitud DOUBLE
 );
 
+CREATE TABLE firebase (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    urlImagenNegocio VARCHAR(255),
+    tituloNegocio VARCHAR(255) NOT NULL,
+    disponible VARCHAR(255),
+    distancia VARCHAR(255),
+    urlImagenCategoria VARCHAR(255),
+    descripcion VARCHAR(255),
+    insignia BOOLEAN,
+    tipoNegocio VARCHAR(255),
+    direccion VARCHAR(255),
+    urlImagenRealNegocio VARCHAR(255),
+    nombreCategoria VARCHAR(255),
+    horario VARCHAR(255),
+    latitud DOUBLE,
+    longitud DOUBLE
+);
+
+
 CREATE TABLE admin (
     user VARCHAR(255) NOT NULL PRIMARY KEY,
     password VARCHAR(255) NOT NULL
