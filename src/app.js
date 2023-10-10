@@ -4,6 +4,9 @@ import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import fileUpload from 'express-fileupload';
 import {pool} from './db.js';
+const admin = require('firebase-admin');
+const multer = require('multer');
+const serviceAccount = require('path/to/serviceAccountKey.json');
 
 const app = express();
 
@@ -23,6 +26,103 @@ app.use(indexRoutes);
 app.use('/api', negociosRoutes, adminRoutes);
 
 
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: 'gs://imgs-89fcf.appspot.com/', // Reemplaza con tu proyecto de Firebase
+  });
+
+const bucket = admin.storage().bucket();
+const upload = multer();
+
+
+app.post('/api/NegImg', upload.fields([
+    { name: 'imagenNegocio', maxCount: 1 },
+    { name: 'imagenCategoria', maxCount: 1 },
+    { name: 'imagenRealNegocio', maxCount: 1 },
+  ]), async (req, res) => {
+    try {
+      if (!req.files || Object.keys(req.files).length !== 3) {
+        return res.status(400).json({
+          message: 'Se deben proporcionar exactamente 3 archivos: imagenNegocio, imagenCategoria y imagenRealNegocio',
+        });
+      }
+  
+      const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
+      const { imagenNegocio, imagenCategoria, imagenRealNegocio } = req.files;
+  
+      // Subir imágenes a Firebase Storage
+      const urls = await Promise.all([
+        uploadImage(imagenNegocio[0]),
+        uploadImage(imagenCategoria[0]),
+        uploadImage(imagenRealNegocio[0]),
+      ]);
+  
+      // Almacenar los datos y las URLs en la base de datos
+      const [rows] = await pool.query(
+        'INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [urls[0], tituloNegocio, disponible, distancia, urls[1], descripcion, insignia, tipoNegocio, direccion, urls[2], nombreCategoria, horario, latitud, longitud]
+      );
+  
+      res.status(201).json({
+        id: rows.insertId,
+        imagenNegocio: urls[0],
+        tituloNegocio,
+        disponible,
+        distancia,
+        imagenCategoria: urls[1],
+        descripcion,
+        insignia,
+        tipoNegocio,
+        direccion,
+        imagenRealNegocio: urls[2],
+        nombreCategoria,
+        horario,
+        latitud,
+        longitud,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: 'Error al crear el negocio',
+      });
+    }
+  });
+
+
+  async function uploadImage(image) {
+    const destination = `Imagenes/${Date.now()}_${image.originalname}`;
+    await bucket.upload(image.buffer, {
+      destination: destination,
+      metadata: {
+        contentType: image.mimetype,
+      },
+    });
+    const [url] = await bucket.file(destination).getSignedUrl({ action: 'read', expires: '01-01-2100' });
+    return url;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 app.post('/api/NegImg', async (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).json({
@@ -64,11 +164,7 @@ app.post('/api/NegImg', async (req, res) => {
     }
 });
 
-
-
-
-
-
+*/
 /*
 app.post('/api/NegImg', async (req, res) => {
     let sampleFile = '';
@@ -94,60 +190,7 @@ app.post('/api/NegImg', async (req, res) => {
 });
 
 */
-app.post('/api/imagenRealNegocio', (req, res) => {
-    let sampleFile = '';
-    if(!req.files || Object.keys(req.files).length === 0){
-        return res.status(400).send('No se enviaron archivos');
-    }
 
-    sampleFile = req.files.archivo;
-
-    //name, data, size, mimetype
-    let sql = `INSERT INTO imagenRealNegocio(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-      pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
-      if(error){
-         res.send(error);
-      }
-      res.json(results);
-    });
-});
-
-
-app.post('/api/imagenCategoria', (req, res) => {
-    let sampleFile = '';
-    if(!req.files || Object.keys(req.files).length === 0){
-        return res.status(400).send('No se enviaron archivos');
-    }
-
-    sampleFile = req.files.archivo;
-
-    //name, data, size, mimetype
-    let sql = `INSERT INTO imagenCategoria(name, data, size, mimetype) VALUES(?, ?, ?, ?)`;
-      pool.query(sql, [req.files.archivo.name, req.files.archivo.data, req.files.archivo.size, req.files.archivo.mimetype], (error, results, fields) => {
-      if(error){
-         res.send(error);
-      }
-      res.json(results);
-    });
-});
-
-
-/*
-app.get('/img/:id', (req, res) => {
-    let sql = `SELECT * FROM file WHERE id = ?`;
-      pool.query(sql, [id], (error, results, fields) => {
-      if(error){
-         res.send(error);
-      }
-      
-      //forza la descarga del archivo
-      res.setHeader('Content-Disposition', `attachment; filename="${results[0].name}"`);
-      res.setHeader('Content-Type', results[0].mimetype)
-      res.send(results[0].data);
-    });
-});
-
-*/
 app.use((req, res, next) => {
     res.status(404).json({
         message: 'Not found'
