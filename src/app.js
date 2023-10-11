@@ -75,7 +75,7 @@ app.get('/api/negocios', async (req, res) => {
     }
 })
 
-app.get('/api/negocios/id:', async (req, res) => {
+app.get('/api/negocios/:id', async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM negocios WHERE id = ?', [req.params.id])
 
@@ -91,123 +91,58 @@ app.get('/api/negocios/id:', async (req, res) => {
     }
 })
 
-    
 
+app.patch('/api/negocios/:id', upload.fields([{ name: 'imagenNegocio', maxCount: 1 }, { name: 'imagenRealNegocio', maxCount: 1 }]), async (req, res) => {
+    const negocioId = req.params.id;
+    const { tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
+    let imagenNegocio = req.files.imagenNegocio;
+    let imagenRealNegocio = req.files.imagenRealNegocio;
 
-/*
-app.post('/api/NegImg', async (req, res) => {
+    // Realiza una consulta para actualizar los datos del negocio con el ID proporcionado
     try {
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'No se enviaron archivos'
-            });
+        // Verifica si se proporcionaron nuevas imágenes y las carga si es necesario
+        if (imagenNegocio && imagenRealNegocio && imagenNegocio.length > 0 && imagenRealNegocio.length > 0) {
+            const uploadPromises = [
+                uploadFile(imagenNegocio[0]),
+                uploadFile(imagenRealNegocio[0])
+            ];
+
+            const uploadResults = await Promise.all(uploadPromises);
+            const [imagenNegocioResult, imagenRealNegocioResult] = uploadResults;
+
+            imagenNegocio = imagenNegocioResult.downloadURL;
+            imagenRealNegocio = imagenRealNegocioResult.downloadURL;
         }
-  
-      const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
-      const { imagenNegocio, imagenCategoria, imagenRealNegocio } = req.files;
-  
-      // Subir imágenes a Firebase Storage
-      const urls = await Promise.all([
-        uploadImage(imagenNegocio[0]),
-        uploadImage(imagenCategoria[1]),
-        uploadImage(imagenRealNegocio[2]),
-      ]);
-  
-      // Almacenar los datos y las URLs en la base de datos
-      const [rows] = await pool.query(
-        'INSERT INTO firebase (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [urls[0], tituloNegocio, disponible, distancia, urls[1], descripcion, insignia, tipoNegocio, direccion, urls[2], nombreCategoria, horario, latitud, longitud]
-      );
-  
-      res.status(201).json({
-        id: rows.insertId,
-        imagenNegocio: urls[0],
-        tituloNegocio,
-        disponible,
-        distancia,
-        imagenCategoria: urls[1],
-        descripcion,
-        insignia,
-        tipoNegocio,
-        direccion,
-        imagenRealNegocio: urls[2],
-        nombreCategoria,
-        horario,
-        latitud,
-        longitud,
-      });
+
+        // Actualiza los datos del negocio, incluyendo las imágenes si se proporcionaron
+        const updateQuery = `
+            UPDATE negocios
+            SET imagenNegocio = IFNULL(?, imagenNegocio), tituloNegocio = IFNULL(?, tituloNegocio), disponible = IFNULL(?, disponible), distancia = IFNULL(?, distancia), imagenCategoria = IFNULL(?, imagenCategoria), descripcion= IFNULL(?, descripcion), insignia = IFNULL(?, insignia), tipoNegocio = IFNULL(?, tipoNegocio), direccion = IFNULL(?, direccion), imagenRealNegocio = IFNULL(?, imagenRealNegocio), nombreCategoria = IFNULL(?, nombreCategoria), horario = IFNULL(?, horario), latitud = IFNULL(?, latitud), longitud = IFNULL(?, longitud)
+            WHERE id = ?`;
+
+        await pool.query(updateQuery, [imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud, negocioId]);
+
+        res.json({ message: 'Negocio actualizado' });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        message: 'Error al crear el negocio',
-      });
-    }
-  });
-
-    
-
-  async function uploadImage(image) {
-    const destination = `Imagenes/${Date.now()}_${image.name}`;
-    const storage = getStorage(firebaseApp); // Inicializa una instancia de Firebase Storage
-    const storageRef = ref(storage, destination);
-    try {
-        await uploadBytes(storageRef, image.data);
-        const downloadUrl = await getDownloadURL(storageRef);
-        return downloadUrl;
-    } catch (error) {
-        console.error('Error general:', error);
-        res.status(500).json({
-          message: 'Error al crear el negociooo',
-        })
-        }
-    }
-
-    */
-
-
-/*
-app.post('/api/NegImg', async (req, res) => {
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).json({
-            message: 'No se enviaron archivos'
-        });
-    }
-
-    try {
-        const { imagenNegocio, imagenCategoria, imagenRealNegocio } = req.files;
-        const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
-
-        const [rows] = await pool.query(
-            'INSERT INTO negocios (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [imagenNegocio.data, tituloNegocio, disponible, distancia, imagenCategoria.data, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio.data, nombreCategoria, horario, latitud, longitud]
-        );
-
-        res.status(201).json({
-            id: rows.insertId,
-            imagenNegocio: imagenNegocio.data,
-            tituloNegocio,
-            disponible,
-            distancia,
-            imagenCategoria: imagenCategoria.data,
-            descripcion,
-            insignia,
-            tipoNegocio,
-            direccion,
-            imagenRealNegocio: imagenRealNegocio.data,
-            nombreCategoria,
-            horario,
-            latitud,
-            longitud
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: 'Error al crear el negocio'
-        });
+        res.status(500).json({ message: 'Error al actualizar el negocio' });
     }
 });
 
-*/
+
+
+app.delete('/api/negocios/:id', async (req, res) => {
+    const negocioId = req.params.id;
+
+    try {
+        const deleteQuery = 'DELETE FROM negocios WHERE id = ?';
+        await pool.query(deleteQuery, [negocioId]);
+
+        res.json({ message: 'Negocio eliminado' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al eliminar el negocio' });
+    }
+});
+
 
 app.use((req, res, next) => {
     res.status(404).json({
