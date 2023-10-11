@@ -30,9 +30,9 @@ app.use('/api', negociosRoutes, adminRoutes);
 // prettier-ignore
 app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name: 'imagenCategoria', maxCount:1}, {name: 'imagenRealNegocio', maxCount:1}]), async (req, res) => {
     const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
-    const imagenNegocio = req.files.imagenNegocio;
-    const imagenCategoria = req.files.imagenCategoria;
-    const imagenRealNegocio = req.files.imagenRealNegocio;
+    let imagenNegocio = req.files.imagenNegocio;
+    let imagenCategoria = req.files.imagenCategoria;
+    let imagenRealNegocio = req.files.imagenRealNegocio;
 
     if (
         imagenNegocio && imagenCategoria && imagenRealNegocio && // Verifica que los objetos no sean nulos
@@ -46,6 +46,7 @@ app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name:
 
           const uploadResults = await Promise.all(uploadPromises);
           const [imagenNegocioResult, imagenCategoriaResult, imagenRealNegocioResult] = uploadResults;
+
           imagenNegocio = imagenNegocioResult.downloadURL;
           imagenCategoria = imagenCategoriaResult.downloadURL;
           imagenRealNegocio = imagenRealNegocioResult.downloadURL;
@@ -59,7 +60,6 @@ app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name:
         res.status(201).json({message: 'Negocio creado'})
         
     }
-
 
     return res.status(400).json({message: 'No hay imagen'})
 
