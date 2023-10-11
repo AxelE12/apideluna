@@ -4,20 +4,13 @@ import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import fileUpload from 'express-fileupload';
 import {pool} from './db.js';
-import { initializeApp } from 'firebase/app';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {upload} from './multer.js'
+import {uploadFile} from './util/uploadFile.js'
 
 const app = express();
 
 app.use(express.json());
 app.use(fileUpload());
-
-const firebaseConfig = {
-    projectId: 'imgs-89fcf',
-    storageBucket: 'gs://imgs-89fcf.appspot.com',
-  };
-
-const firebaseApp = initializeApp(firebaseConfig);
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
@@ -31,10 +24,40 @@ app.use((req, res, next) => {
 app.use(indexRoutes);
 app.use('/api', negociosRoutes, adminRoutes);
 
-app.post('/crearNeg', async (req, res) => {
 
 
-    return res.json({message: 'Negocio creado'})
+//INTENTO VIDEO
+// prettier-ignore
+app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name: 'imagenCategoria', maxCount:1}, {name: 'imagenRealNegocio', maxCount:1}]), async (req, res) => {
+    const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
+    const imagenNegocio = req.files.imagenNegocio;
+    const imagenCategoria = req.files.imagenCategoria;
+    const imagenRealNegocio = req.files.imagenRealNegocio;
+
+    if (
+        imagenNegocio && imagenCategoria && imagenRealNegocio && // Verifica que los objetos no sean nulos
+        imagenNegocio.length > 0 && imagenCategoria.length > 0 && imagenRealNegocio.length > 0 // Verifica que los arrays tengan elementos
+      ) {
+        const {downloadURLs} = await Promise.all([
+          uploadFile(imagenNegocio[0]),
+          uploadFile(imagenCategoria[0]),
+          uploadFile(imagenRealNegocio[0])
+        ]);
+
+        const [downloadURL1, downloadURL2, downloadURL3] = downloadURLs;
+
+        const [rows] = await pool.query(
+            'INSERT INTO firebase (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [downloadURL1, tituloNegocio, disponible, distancia, downloadURL2, descripcion, insignia, tipoNegocio, direccion, downloadURL3, nombreCategoria, horario, latitud, longitud]
+          );
+        
+        
+        res.status(201).json({message: 'Negocio creado'})
+        
+    }
+
+
+    return res.status(400).json({message: 'No hay imagen'})
 
 })
 
@@ -51,6 +74,7 @@ app.get('/Negs', async (req, res) => {
 
 
 
+/*
 app.post('/api/NegImg', async (req, res) => {
     try {
         if (!req.files || Object.keys(req.files).length === 0) {
@@ -100,6 +124,7 @@ app.post('/api/NegImg', async (req, res) => {
     }
   });
 
+    
 
   async function uploadImage(image) {
     const destination = `Imagenes/${Date.now()}_${image.name}`;
@@ -117,24 +142,7 @@ app.post('/api/NegImg', async (req, res) => {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    */
 
 
 /*
