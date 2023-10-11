@@ -2,7 +2,7 @@ import express from 'express';
 import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
-import fileUpload from 'express-fileupload';
+//import fileUpload from 'express-fileupload';
 import {pool} from './db.js';
 import {upload} from './multer.js'
 import {uploadFile} from './util/uploadFile.js'
@@ -10,7 +10,7 @@ import {uploadFile} from './util/uploadFile.js'
 const app = express();
 
 app.use(express.json());
-app.use(fileUpload());
+//app.use(fileUpload());
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
