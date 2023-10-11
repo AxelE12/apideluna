@@ -34,8 +34,8 @@ app.post('/api/negocios', upload.fields([{name: 'imagenNegocio', maxCount:1}, {n
     let imagenRealNegocio = req.files.imagenRealNegocio;
 
     if (
-        imagenNegocio && imagenRealNegocio && // Verifica que los objetos no sean nulos
-        imagenNegocio.length > 0 && imagenRealNegocio.length > 0 // Verifica que los arrays tengan elementos
+        imagenNegocio && imagenRealNegocio && 
+        imagenNegocio.length > 0 && imagenRealNegocio.length > 0 
       ) {
         const uploadPromises = [
             uploadFile(imagenNegocio[0]),
@@ -92,10 +92,6 @@ app.get('/api/negocios/id:', async (req, res) => {
 })
 
     
-
-
-
-
 
 
 /*
