@@ -57,8 +57,9 @@ app.post('/api/negocios', upload.fields([{name: 'imagenNegocio', maxCount:1}, {n
         res.status(201).json({message: 'Negocio creado'})
         
     }
-
-    return res.status(400).json({message: 'No hay imagen'})
+    else{
+        return res.status(400).json({message: 'No hay imagen'}) 
+    }
 
 })
 
