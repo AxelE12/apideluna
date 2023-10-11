@@ -1,5 +1,5 @@
 import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
-import {storage} from '../firebase'
+import {storage} from '../firebase.js'
 import {sharp} from './sharp'
 
 export async function uploadFile(file){
