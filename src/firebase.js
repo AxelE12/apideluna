@@ -1,17 +1,15 @@
 import {initializeApp} from 'firebase/app';
 import { getStorage } from 'firebase/storage';
-import dotenv from 'dotenv';
 
 dotenv.config();
 
 const firebaseConfig = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID,
-
+    apiKey: "AIzaSyBHWV30fR2WepACJEMFnmQUXFVhiS6XlL8",
+    authDomain: "imagenes-deluna.firebaseapp.com",
+    projectId: "imagenes-deluna",
+    storageBucket: "imagenes-deluna.appspot.com",
+    messagingSenderId: "958073331164",
+    appId: "1:958073331164:web:f21292f5442bc4c3af4319"
 }
 
 const firebaseApp = initializeApp(firebaseConfig);
