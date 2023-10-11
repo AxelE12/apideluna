@@ -38,13 +38,17 @@ app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name:
         imagenNegocio && imagenCategoria && imagenRealNegocio && // Verifica que los objetos no sean nulos
         imagenNegocio.length > 0 && imagenCategoria.length > 0 && imagenRealNegocio.length > 0 // Verifica que los arrays tengan elementos
       ) {
-        const {downloadURLs} = await Promise.all([
-          uploadFile(imagenNegocio[0]),
-          uploadFile(imagenCategoria[0]),
-          uploadFile(imagenRealNegocio[0])
-        ]);
+        const uploadPromises = [
+            uploadFile(imagenNegocio[0]),
+            uploadFile(imagenCategoria[0]),
+            uploadFile(imagenRealNegocio[0])
+          ];
 
-        const [downloadURL1, downloadURL2, downloadURL3] = downloadURLs;
+          const uploadResults = await Promise.all(uploadPromises);
+          const [imagenNegocioResult, imagenCategoriaResult, imagenRealNegocioResult] = uploadResults;
+          imagenNegocio = imagenNegocioResult.downloadURL;
+          imagenCategoria = imagenCategoriaResult.downloadURL;
+          imagenRealNegocio = imagenRealNegocioResult.downloadURL;
 
         const [rows] = await pool.query(
             'INSERT INTO firebase (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
