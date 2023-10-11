@@ -28,7 +28,7 @@ app.use('/api', negociosRoutes, adminRoutes);
 
 //INTENTO VIDEO
 // prettier-ignore
-app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name: 'imagenRealNegocio', maxCount:1}]), async (req, res) => {
+app.post('/api/negocios', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name: 'imagenRealNegocio', maxCount:1}]), async (req, res) => {
     const { tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
     let imagenNegocio = req.files.imagenNegocio;
     let imagenRealNegocio = req.files.imagenRealNegocio;
@@ -63,7 +63,7 @@ app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name:
 })
 
 
-app.get('/Negs', async (req, res) => {
+app.get('/api/negocios', async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM negocios')
         res.json(rows)
@@ -74,7 +74,7 @@ app.get('/Negs', async (req, res) => {
     }
 })
 
-app.get('/Negs/:id', async (req, res) => {
+app.get('/api/negocios/id:', async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM negocios WHERE id = ?', [req.params.id])
 
