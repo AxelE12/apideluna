@@ -67,8 +67,30 @@ app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name:
 
 
 app.get('/Negs', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM firebase')
+        res.json(rows)
+    } catch (error) {        
+        res.status(500).json({
+            message: 'Error al obtener los negocios'
+        })
+    }
+})
 
-    return res.json({message: 'Negocios obtenidos'})
+app.get('/Negs/:id', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM firebase WHERE id = ?', [req.params.id])
+
+        if(rows.length <= 0) return res.status(404).json({
+            message: 'Negocio no encontrado'
+        })
+
+        res.json(rows[0])
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al obtener el negocio'
+        })
+    }
 })
 
     
