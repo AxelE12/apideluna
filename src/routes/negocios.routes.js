@@ -3,14 +3,14 @@ import {getNegocios, getNegocio, crearNegocio, actualizarNegocio, eliminarNegoci
 
 const router = Router();
 
-router.get('/negocios', getNegocios);
+router.get('/negocioss', getNegocios);
 
-router.get('/negocios/:id', getNegocio);
+router.get('/negocioss/:id', getNegocio);
 
-router.post('/negocios', crearNegocio);
+router.post('/negocioss', crearNegocio);
 
-router.delete('/negocios/:id', eliminarNegocio);
+router.delete('/negocioss/:id', eliminarNegocio);
 
-router.patch('/negocios/:id', actualizarNegocio);
+router.patch('/negocioss/:id', actualizarNegocio);
 
 export default router;
