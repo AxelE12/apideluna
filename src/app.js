@@ -52,7 +52,7 @@ app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name:
 
         const [rows] = await pool.query(
             'INSERT INTO firebase (imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [downloadURL1, tituloNegocio, disponible, distancia, downloadURL2, descripcion, insignia, tipoNegocio, direccion, downloadURL3, nombreCategoria, horario, latitud, longitud]
+            [imagenNegocio, tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, imagenRealNegocio, nombreCategoria, horario, latitud, longitud]
           );
         
         
