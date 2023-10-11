@@ -28,27 +28,25 @@ app.use('/api', negociosRoutes, adminRoutes);
 
 //INTENTO VIDEO
 // prettier-ignore
-app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name: 'imagenCategoria', maxCount:1}, {name: 'imagenRealNegocio', maxCount:1}]), async (req, res) => {
+app.post('/crearNeg', upload.fields([{name: 'imagenNegocio', maxCount:1}, {name: 'imagenRealNegocio', maxCount:1}]), async (req, res) => {
     const { tituloNegocio, disponible, distancia, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
     let imagenNegocio = req.files.imagenNegocio;
-    let imagenCategoria = req.files.imagenCategoria;
+    let imagenCategoria = null
     let imagenRealNegocio = req.files.imagenRealNegocio;
 
     if (
-        imagenNegocio && imagenCategoria && imagenRealNegocio && // Verifica que los objetos no sean nulos
-        imagenNegocio.length > 0 && imagenCategoria.length > 0 && imagenRealNegocio.length > 0 // Verifica que los arrays tengan elementos
+        imagenNegocio && imagenRealNegocio && // Verifica que los objetos no sean nulos
+        imagenNegocio.length > 0 && imagenRealNegocio.length > 0 // Verifica que los arrays tengan elementos
       ) {
         const uploadPromises = [
             uploadFile(imagenNegocio[0]),
-            uploadFile(imagenCategoria[0]),
             uploadFile(imagenRealNegocio[0])
           ];
 
           const uploadResults = await Promise.all(uploadPromises);
-          const [imagenNegocioResult, imagenCategoriaResult, imagenRealNegocioResult] = uploadResults;
+          const [imagenNegocioResult, imagenRealNegocioResult] = uploadResults;
 
           imagenNegocio = imagenNegocioResult.downloadURL;
-          imagenCategoria = imagenCategoriaResult.downloadURL;
           imagenRealNegocio = imagenRealNegocioResult.downloadURL;
 
         const [rows] = await pool.query(
