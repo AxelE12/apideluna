@@ -1,6 +1,6 @@
 import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
 import {storage} from '../firebase.js'
-import {sharp} from 'sharp' 
+import sharp from 'sharp'
 
 export async function uploadFile(file){
     let fileBuffer = await sharp(file.buffer).resize({width: 200, height: 200, fit: 'cover'}).toBuffer()
