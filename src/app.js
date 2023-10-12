@@ -92,7 +92,7 @@ app.get('/api/negocios/:id', async (req, res) => {
 })
 
 /*
-app.patch('/api/negocios/:id', upload.fields([{ name: 'imagenNegocio', maxCount: 1 }, { name: 'imagenRealNegocio', maxCount: 1 }]), async (req, res) => {
+app.patch ('/api/negocios/:id', upload.fields([{ name: 'imagenNegocio', maxCount: 1 }, { name: 'imagenRealNegocio', maxCount: 1 }]), async (req, res) => {
     const negocioId = req.params.id;
     const { tituloNegocio, disponible, distancia, imagenCategoria, descripcion, insignia, tipoNegocio, direccion, nombreCategoria, horario, latitud, longitud } = req.body;
     let imagenNegocio = req.files.imagenNegocio;
