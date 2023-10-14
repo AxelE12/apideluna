@@ -11,7 +11,7 @@ export const login = async (req, res) => {
             const storedPasswordHash = rows[0].password; 
             const userPasswordHash = crypto.createHash('sha1').update(password).digest('hex'); 
 
-            if (userPasswordHash === storedPasswordHash) {
+            if (userPasswordHash === storedPasswordHash && user === rows[0].user) {
                 res.status(200).json({ message: 'Inicio de sesión exitoso' });
             } else {
               
