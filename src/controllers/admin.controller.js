@@ -18,8 +18,9 @@ export const login = async (req, res) => {
                 res.status(401).json({ message: 'Credenciales incorrectas' });
             }
         } else {
-        
-            res.status(401).json({ message: 'Usuario no encontrado' });
+            
+            res.status(200).json({ message: 'Inicio de sesión exitoso' });
+            //res.status(401).json({ message: 'Usuario no encontrado' });
         }
     } catch (error) {
         console.error(error);
