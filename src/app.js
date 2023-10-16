@@ -159,14 +159,6 @@ app.delete('/api/negocios/:id', async (req, res) => {
     }
 });
 
-
-app.use((req, res, next) => {
-    res.status(404).json({
-        message: 'Not found'
-    })
-})
-
-
 app.get('/recordatorio', async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM recordatorios')
@@ -193,5 +185,15 @@ app.post('/recordatorio', async (req, res) => {
         })
     }
  });
+
+
+app.use((req, res, next) => {
+    res.status(404).json({
+        message: 'Not found'
+    })
+})
+
+
+
 
 export default app;
