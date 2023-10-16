@@ -166,4 +166,32 @@ app.use((req, res, next) => {
     })
 })
 
+
+app.get('/recordatorio', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM recordatorios')
+        res.json(rows)
+    } catch (error) {        
+        res.status(500).json({
+            message: 'Error al obtener los recordatorios'
+        })
+    }
+});
+
+app.post('/recordatorio', async (req, res) => {
+    try {
+        const {titulo, descripcion, categoria} = req.body;
+        const [rows]= await pool.query ('INSERT INTO recordatorios(titulo, descripcion, categoria) VALUES (?, ?, ?) ',
+            [titulo, descripcion, categoria])
+        
+        res.send({
+            id: rows.insertId, titulo, descripcion, categoria
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error al crear el recordatorio'
+        })
+    }
+ });
+
 export default app;
