@@ -35,10 +35,10 @@ SELECT * FROM admin;
 SELECT * FROM negocios;
 
 CREATE TABLE recordatorios (
-    id INT AUTO_INCREMENT PRIMARY KEY
+    id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
-    descripcion VARCHAR(255) NOT NULL,
-    categoria VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255),
+    categoria VARCHAR(255)
 );
 
 

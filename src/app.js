@@ -172,18 +172,23 @@ app.get('/recordatorio', async (req, res) => {
 
 app.post('/recordatorio', async (req, res) => {
     try {
-        const {titulo, descripcion, categoria} = req.body;
-        const [rows]= await pool.query ('INSERT INTO recordatorios (titulo, descripcion, categoria) VALUES (?, ?, ?) ',
-            [titulo, descripcion, categoria])
-            
-        res.status(201).json({message: 'Recordatorio creado'})
+        const { titulo, descripcion, categoria } = req.body;
 
+        if (!titulo) {
+            return res.status(400).json({ message: 'El campo "titulo" es obligatorio' });
+        }
+
+        const [result] = await pool.query(
+            'INSERT INTO recordatorios (titulo, descripcion, categoria) VALUES (?, ?, ?)',
+            [titulo, descripcion, categoria]
+        );
+
+        res.status(201).json({ message: 'Recordatorio creado con éxito', recordatorioId: result.insertId });
     } catch (error) {
-        res.status(500).json({
-            message: 'Error al crear el recordatorio'
-        })
+        res.status(500).json({ message: 'Error al crear el recordatorio', error: error.message });
     }
- });
+});
+
 
 
 app.use((req, res, next) => {
