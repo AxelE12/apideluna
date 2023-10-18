@@ -159,6 +159,69 @@ app.delete('/api/negocios/:id', async (req, res) => {
     }
 });
 
+
+const jwt = require('jsonwebtoken');
+
+app.post('/admin/login', async (req, res) => {
+    try {
+        const { user, password } = req.body;
+
+        if (!user || !password) {
+            return res.status(400).json({ message: 'El usuario y la contraseña son obligatorios' });
+        }
+
+        // Obtener los datos del administrador desde la base de datos
+        const [rows] = await pool.query('SELECT * FROM admin WHERE user = ?', [user]);
+
+        if (rows.length === 0) {
+            return res.status(401).json({ message: 'Credenciales incorrectas' });
+        }
+
+        const admin = rows[0];
+        const passwordMatch = await bcrypt.compare(password, admin.password);
+
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Credenciales incorrectas' });
+        }
+
+        // Generar un token de autenticación
+        const token = jwt.sign({ user: admin.user }, 'deluna', { expiresIn: '600' });
+
+        res.json({ message: 'Inicio de sesión exitoso', token });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al iniciar sesión', error: error.message });
+    }
+});
+
+
+const requireAuth = (req, res, next) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ message: 'Token no proporcionado' });
+    }
+
+    jwt.verify(token, 'deluna', (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: 'Token no válido' });
+        }
+
+        // El token es válido, continúa con la solicitud
+        next();
+    });
+};
+
+// Usar el middleware requireAuth en rutas protegidas
+app.get('/ruta_protegida', requireAuth, (req, res) => {
+    res.json({ message: 'Acceso permitido a la ruta protegida' });
+});
+
+
+
+
+
+
+
 app.get('/recordatorio', async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM recordatorios')
