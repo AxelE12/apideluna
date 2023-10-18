@@ -6,6 +6,7 @@ import adminRoutes from './routes/admin.routes.js';
 import {pool} from './db.js';
 import {upload} from './multer.js'
 import {uploadFile} from './util/uploadFile.js'
+import jwt from 'jsonwebtoken';
 
 const app = express();
 
@@ -160,7 +161,6 @@ app.delete('/api/negocios/:id', async (req, res) => {
 });
 
 
-const jwt = require('jsonwebtoken');
 
 app.post('/admin/login', async (req, res) => {
     try {
