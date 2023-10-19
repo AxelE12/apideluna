@@ -2,16 +2,13 @@ import express from 'express';
 import negociosRoutes from './routes/negocios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import adminRoutes from './routes/admin.routes.js';
-//import fileUpload from 'express-fileupload';
 import {pool} from './db.js';
 import {upload} from './multer.js'
 import {uploadFile} from './util/uploadFile.js'
 import jwt from 'jsonwebtoken';
 
 const app = express();
-
 app.use(express.json());
-//app.use(fileUpload());
 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
@@ -185,9 +182,12 @@ app.post('/admin/login', async (req, res) => {
         }
 
         // Generar un token de autenticación
-        const token = jwt.sign({ user: admin.user }, 'deluna', { expiresIn: '600' });
+        const generarToken = (userData) => {
+            const token = jwt.sign(userData, 'deluna', { expiresIn: '1m' }); // Token expira en 1 minuto
+            return token;
+        }
 
-        res.json({ message: 'Inicio de sesión exitoso', token });
+        res.json({ message: 'Inicio de sesión exitoso', generarToken });
     } catch (error) {
         res.status(500).json({ message: 'Error al iniciar sesión', error: error.message });
     }
