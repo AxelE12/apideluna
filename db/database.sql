@@ -25,7 +25,8 @@ CREATE TABLE negocios (
 
 CREATE TABLE admin (
     user VARCHAR(255) NOT NULL PRIMARY KEY,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    token VARCHAR(255)
 );
 
 INSERT INTO admin (user, password)
