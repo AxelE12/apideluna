@@ -187,11 +187,14 @@ app.post('/admin/login', async (req, res) => {
             return token;
         }
 
-        res.json({ message: 'Inicio de sesión exitoso', generarToken });
+        const token = generarToken({ user: admin.user }); // Generar el token
+
+        res.json({ message: 'Inicio de sesión exitoso', token }); // Enviar el token en la respuesta
     } catch (error) {
         res.status(500).json({ message: 'Error al iniciar sesión', error: error.message });
     }
 });
+
 
 
 const requireAuth = (req, res, next) => {
