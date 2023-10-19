@@ -4,6 +4,7 @@ USE trenmayadb;
 
 -- DROP DATABASE trenmayadb;
 
+
 CREATE TABLE negocios (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	imagenNegocio VARCHAR(255),
